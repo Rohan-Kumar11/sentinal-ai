@@ -1,9 +1,12 @@
+
 from pathlib import Path
 from typing import List
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+
+from api.routes.risk import router as risk_router
 
 
 # ============================================================
@@ -42,19 +45,14 @@ app = FastAPI(
 # ============================================================
 # CORS
 # ============================================================
+
+# Flutter Web uses a dynamically assigned localhost port.
 #
-# Flutter Web uses a dynamically assigned localhost port,
-# for example:
-#
-# http://localhost:61358
-# http://localhost:59123
-#
-# Therefore, we allow localhost and 127.0.0.1 with any port
+# Therefore, localhost and 127.0.0.1 are allowed with any port
 # during local development.
 #
 # This is ONLY intended for local development.
 # Production CORS should use specific trusted origins.
-# ============================================================
 
 app.add_middleware(
     CORSMiddleware,
@@ -123,12 +121,11 @@ class SessionRoleStatisticsResponse(BaseModel):
 # ============================================================
 # DEVELOPMENT STORAGE
 # ============================================================
-#
+
 # Kept for compatibility with the existing application.
 #
 # File storage is now the persistent source for attendance
 # sessions.
-# ============================================================
 
 attendance_storage: List[AttendanceSession] = []
 
@@ -418,9 +415,9 @@ def get_role_statistics():
                 }
 
             role_data[role]["people"] += 1
-            role_data[role][
-                "observed_seconds"
-            ] += record.duration_seconds
+            role_data[role]["observed_seconds"] += (
+                record.duration_seconds
+            )
 
     statistics = []
 
@@ -495,9 +492,9 @@ def get_session_role_statistics(
             }
 
         role_data[role]["people"] += 1
-        role_data[role][
-            "observed_seconds"
-        ] += record.duration_seconds
+        role_data[role]["observed_seconds"] += (
+            record.duration_seconds
+        )
 
     statistics = []
 
@@ -592,3 +589,30 @@ def create_attendance(
     save_attendance_session(session)
 
     return session
+
+
+# ============================================================
+# RISK INTELLIGENCE ROUTES
+# ============================================================
+#
+# These routes connect:
+#
+# Attendance
+#     +
+# Project/Application Data
+#     +
+# Inspection Data
+#     ↓
+# Feature Aggregation
+#     ↓
+# Anomaly Detection
+#     ↓
+# Risk Engine
+#
+# The router implementation lives in:
+#
+# api/routes/risk.py
+# ============================================================
+
+app.include_router(risk_router)
+

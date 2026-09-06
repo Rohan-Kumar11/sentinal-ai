@@ -1,0 +1,19 @@
+{
+  "session_id": "20260906_134524",
+  "session_started_at": "2026-09-06T13:45:24.724152+00:00",
+  "session_ended_at": "2026-09-06T13:46:07.938057+00:00",
+  "total_tracked": 1,
+  "staff": 1,
+  "beneficiary": 0,
+  "unknown": 0,
+  "records": [
+    {
+      "track_id": 1,
+      "role": "Staff",
+      "first_seen": "2026-09-06T13:45:51.071547+00:00",
+      "last_seen": "2026-09-06T13:46:07.189369+00:00",
+      "duration_seconds": 16.12,
+      "observations": 29
+    }
+  ]
+}
