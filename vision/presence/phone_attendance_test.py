@@ -6,7 +6,6 @@ import time
 from datetime import datetime, timezone
 
 import cv2
-from ultralytics import YOLO
 
 
 # Add the project root to Python's import path.
@@ -18,9 +17,16 @@ if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
 
-from vision.presence.attendance_engine import AttendanceEngine
-from vision.person_classification.mock_role_classifier import classify_role
+from ultralytics import YOLO
 
+from vision.person_classification.mock_role_classifier import classify_role
+from vision.person_tracking.person_tracker import track_people
+from vision.presence.attendance_engine import AttendanceEngine
+from vision.video_ingestion.camera_config import get_camera_config
+from vision.video_ingestion.video_capture import VideoCaptureService
+
+
+MODEL_PATH = "vision/person_detection/yolo11n.pt"
 
 def utc_now_iso():
     """Return the current UTC time as an ISO-8601 string."""
@@ -30,8 +36,9 @@ def utc_now_iso():
 def main():
     parser = argparse.ArgumentParser(
         description=(
-            "Run phone camera through YOLO, ByteTrack, "
-            "mock role classification, and attendance."
+            "Run phone camera through the reusable "
+            "video capture, YOLO, ByteTrack, "
+            "mock role classification, and attendance pipeline."
         )
     )
 
@@ -50,6 +57,10 @@ def main():
 
     args = parser.parse_args()
 
+    if not 0.0 <= args.confidence <= 1.0:
+        print("ERROR: Confidence must be between 0 and 1.")
+        return
+
     print("=" * 60)
     print("SENTINAL - PHONE CAMERA ATTENDANCE TEST")
     print("=" * 60)
@@ -59,11 +70,13 @@ def main():
     print("      ↓")
     print("  IP Webcam")
     print("      ↓")
-    print("  OpenCV")
+    print("  VideoCaptureService")
     print("      ↓")
     print("  YOLO11n")
     print("      ↓")
     print("  ByteTrack")
+    print("      ↓")
+    print("  Temporary Track IDs")
     print("      ↓")
     print("  Mock Role")
     print("      ↓")
@@ -83,16 +96,28 @@ def main():
     print("Role classification is currently MOCK.")
     print()
 
+    # Reuse the existing phone camera configuration.
+    camera_config = get_camera_config("phone")
+
+    if args.source:
+        camera_config = camera_config.__class__(
+            name=camera_config.name,
+            source=args.source,
+            source_type=camera_config.source_type,
+            location=camera_config.location,
+            enabled=camera_config.enabled,
+        )
+
+    capture_service = VideoCaptureService(camera_config)
+
     print("Loading YOLO model...")
 
-    model = YOLO("yolo11n.pt")
+    model = YOLO(MODEL_PATH)
 
     print("YOLO model loaded.")
     print("Opening phone camera stream...")
 
-    cap = cv2.VideoCapture(args.source)
-
-    if not cap.isOpened():
+    if not capture_service.open():
         print()
         print("ERROR: Could not open the phone camera stream.")
         print("Make sure IP Webcam is running.")
@@ -120,7 +145,7 @@ def main():
 
     try:
         while True:
-            ret, frame = cap.read()
+            ret, frame = capture_service.read()
 
             if not ret:
                 print("ERROR: Failed to read frame from phone camera.")
@@ -128,90 +153,65 @@ def main():
 
             frame_count += 1
 
-            # Timing values required by AttendanceEngine.update().
             current_time = time.perf_counter()
             current_timestamp = utc_now_iso()
 
-            results = model.track(
-                frame,
-                persist=True,
-                tracker="bytetrack.yaml",
-                classes=[0],
-                conf=args.confidence,
-                verbose=False,
+            # Reuse the existing YOLO + ByteTrack implementation.
+            tracks = track_people(
+                model=model,
+                frame=frame,
+                confidence=args.confidence,
             )
 
-            result = results[0]
-
-            annotated_frame = result.plot()
+            annotated_frame = frame.copy()
 
             current_tracks = []
 
-            if (
-                result.boxes is not None
-                and result.boxes.id is not None
-            ):
-                track_ids = (
-                    result.boxes.id
-                    .int()
-                    .cpu()
-                    .tolist()
+            for x1, y1, x2, y2, track_id, _detection_confidence in tracks:
+                role_data = classify_role(track_id)
+
+                role = role_data["role"]
+                role_confidence = role_data["confidence"]
+
+                current_tracks.append(
+                    {
+                        "track_id": track_id,
+                        "role": role,
+                        "confidence": role_confidence,
+                    }
                 )
 
-                for index, track_id in enumerate(track_ids):
-                    role_data = classify_role(track_id)
+                # Update attendance using the existing AttendanceEngine.
+                attendance.update(
+                    track_id=track_id,
+                    role=role,
+                    current_time=current_time,
+                    current_timestamp=current_timestamp,
+                )
 
-                    role = role_data["role"]
-                    role_confidence = role_data["confidence"]
+                label = (
+                    f"ID {track_id} | "
+                    f"{role} "
+                    f"({role_confidence:.2f})"
+                )
 
-                    current_tracks.append(
-                        {
-                            "track_id": track_id,
-                            "role": role,
-                            "confidence": role_confidence,
-                        }
-                    )
+                cv2.rectangle(
+                    annotated_frame,
+                    (x1, y1),
+                    (x2, y2),
+                    (0, 255, 0),
+                    2,
+                )
 
-                    # Update attendance using the exact
-                    # AttendanceEngine API.
-                    attendance.update(
-                        track_id=track_id,
-                        role=role,
-                        current_time=current_time,
-                        current_timestamp=current_timestamp,
-                    )
-
-                    box = (
-                        result.boxes.xyxy[index]
-                        .cpu()
-                        .tolist()
-                    )
-
-                    x1, y1, x2, y2 = map(int, box)
-
-                    label = (
-                        f"ID {track_id} | "
-                        f"{role} "
-                        f"({role_confidence:.2f})"
-                    )
-
-                    cv2.rectangle(
-                        annotated_frame,
-                        (x1, y1),
-                        (x2, y2),
-                        (0, 255, 0),
-                        2,
-                    )
-
-                    cv2.putText(
-                        annotated_frame,
-                        label,
-                        (x1, max(y1 - 10, 20)),
-                        cv2.FONT_HERSHEY_SIMPLEX,
-                        0.6,
-                        (0, 255, 0),
-                        2,
-                    )
+                cv2.putText(
+                    annotated_frame,
+                    label,
+                    (x1, max(y1 - 10, 20)),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.6,
+                    (0, 255, 0),
+                    2,
+                )
 
             elapsed = time.perf_counter() - start_time
 
@@ -299,7 +299,7 @@ def main():
 
             key = cv2.waitKey(1) & 0xFF
 
-            if key == ord("q"):
+            if key in (ord("q"), ord("Q")):
                 print()
                 print(
                     f"Quit requested after "
@@ -308,7 +308,7 @@ def main():
                 break
 
     finally:
-        cap.release()
+        capture_service.release()
         cv2.destroyAllWindows()
 
     session_ended_at = utc_now_iso()
@@ -325,8 +325,7 @@ def main():
 
     attendance.print_summary()
 
-    # Build the same API-ready structure used by
-    # AttendanceEngine.
+    # Build the same API-ready structure used by AttendanceEngine.
     session_data = attendance.get_session_data(
         session_id=session_id,
         session_started_at=session_started_at,
@@ -345,8 +344,7 @@ def main():
         )
     )
 
-    # Save the attendance session using the existing
-    # AttendanceEngine implementation.
+    # Save the attendance session using the existing AttendanceEngine.
     saved_file = attendance.save_session_data(
         session_id=session_id,
         session_started_at=session_started_at,
