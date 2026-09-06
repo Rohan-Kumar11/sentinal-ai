@@ -1,0 +1,35 @@
+{
+  "session_id": "20260905_134940",
+  "session_started_at": "2026-09-05T08:19:40.843290+00:00",
+  "session_ended_at": "2026-09-05T08:21:27.196174+00:00",
+  "total_tracked": 3,
+  "staff": 1,
+  "beneficiary": 0,
+  "unknown": 2,
+  "records": [
+    {
+      "track_id": 1,
+      "role": "Staff",
+      "first_seen": "2026-09-05T08:19:44.000082+00:00",
+      "last_seen": "2026-09-05T08:20:41.954424+00:00",
+      "duration_seconds": 57.95,
+      "observations": 109
+    },
+    {
+      "track_id": 9,
+      "role": "Unknown",
+      "first_seen": "2026-09-05T08:20:57.090583+00:00",
+      "last_seen": "2026-09-05T08:20:57.450178+00:00",
+      "duration_seconds": 0.36,
+      "observations": 2
+    },
+    {
+      "track_id": 10,
+      "role": "Unknown",
+      "first_seen": "2026-09-05T08:21:11.320584+00:00",
+      "last_seen": "2026-09-05T08:21:23.752228+00:00",
+      "duration_seconds": 12.43,
+      "observations": 18
+    }
+  ]
+}

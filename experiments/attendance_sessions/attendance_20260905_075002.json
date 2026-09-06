@@ -1,0 +1,147 @@
+{
+  "session_id": "20260905_075002",
+  "session_started_at": "2026-09-05T07:50:02.025960+00:00",
+  "session_ended_at": "2026-09-05T07:51:03.325215+00:00",
+  "total_tracked": 17,
+  "staff": 2,
+  "beneficiary": 0,
+  "unknown": 15,
+  "records": [
+    {
+      "track_id": 1,
+      "role": "Staff",
+      "first_seen": "2026-09-05T07:50:02.178649+00:00",
+      "last_seen": "2026-09-05T07:50:15.276770+00:00",
+      "duration_seconds": 13.1,
+      "observations": 113
+    },
+    {
+      "track_id": 2,
+      "role": "Staff",
+      "first_seen": "2026-09-05T07:50:02.178649+00:00",
+      "last_seen": "2026-09-05T07:50:05.699255+00:00",
+      "duration_seconds": 3.52,
+      "observations": 8
+    },
+    {
+      "track_id": 6,
+      "role": "Unknown",
+      "first_seen": "2026-09-05T07:50:06.520690+00:00",
+      "last_seen": "2026-09-05T07:50:06.606953+00:00",
+      "duration_seconds": 0.09,
+      "observations": 2
+    },
+    {
+      "track_id": 8,
+      "role": "Unknown",
+      "first_seen": "2026-09-05T07:50:15.489779+00:00",
+      "last_seen": "2026-09-05T07:50:18.594268+00:00",
+      "duration_seconds": 3.1,
+      "observations": 37
+    },
+    {
+      "track_id": 10,
+      "role": "Unknown",
+      "first_seen": "2026-09-05T07:50:15.489779+00:00",
+      "last_seen": "2026-09-05T07:50:32.140494+00:00",
+      "duration_seconds": 16.65,
+      "observations": 158
+    },
+    {
+      "track_id": 11,
+      "role": "Unknown",
+      "first_seen": "2026-09-05T07:50:15.667195+00:00",
+      "last_seen": "2026-09-05T07:50:15.875862+00:00",
+      "duration_seconds": 0.21,
+      "observations": 3
+    },
+    {
+      "track_id": 19,
+      "role": "Unknown",
+      "first_seen": "2026-09-05T07:50:34.712763+00:00",
+      "last_seen": "2026-09-05T07:50:34.876309+00:00",
+      "duration_seconds": 0.16,
+      "observations": 3
+    },
+    {
+      "track_id": 23,
+      "role": "Unknown",
+      "first_seen": "2026-09-05T07:50:40.091796+00:00",
+      "last_seen": "2026-09-05T07:50:40.183930+00:00",
+      "duration_seconds": 0.09,
+      "observations": 2
+    },
+    {
+      "track_id": 24,
+      "role": "Unknown",
+      "first_seen": "2026-09-05T07:50:40.091796+00:00",
+      "last_seen": "2026-09-05T07:50:40.467328+00:00",
+      "duration_seconds": 0.38,
+      "observations": 5
+    },
+    {
+      "track_id": 26,
+      "role": "Unknown",
+      "first_seen": "2026-09-05T07:50:44.763580+00:00",
+      "last_seen": "2026-09-05T07:50:44.763580+00:00",
+      "duration_seconds": 0.0,
+      "observations": 1
+    },
+    {
+      "track_id": 31,
+      "role": "Unknown",
+      "first_seen": "2026-09-05T07:50:49.104196+00:00",
+      "last_seen": "2026-09-05T07:50:59.990499+00:00",
+      "duration_seconds": 10.89,
+      "observations": 94
+    },
+    {
+      "track_id": 33,
+      "role": "Unknown",
+      "first_seen": "2026-09-05T07:50:51.796118+00:00",
+      "last_seen": "2026-09-05T07:50:52.669211+00:00",
+      "duration_seconds": 0.87,
+      "observations": 10
+    },
+    {
+      "track_id": 39,
+      "role": "Unknown",
+      "first_seen": "2026-09-05T07:50:54.777024+00:00",
+      "last_seen": "2026-09-05T07:50:55.354035+00:00",
+      "duration_seconds": 0.58,
+      "observations": 7
+    },
+    {
+      "track_id": 47,
+      "role": "Unknown",
+      "first_seen": "2026-09-05T07:50:58.991160+00:00",
+      "last_seen": "2026-09-05T07:50:59.318785+00:00",
+      "duration_seconds": 0.33,
+      "observations": 5
+    },
+    {
+      "track_id": 50,
+      "role": "Unknown",
+      "first_seen": "2026-09-05T07:50:59.318785+00:00",
+      "last_seen": "2026-09-05T07:50:59.569239+00:00",
+      "duration_seconds": 0.25,
+      "observations": 4
+    },
+    {
+      "track_id": 51,
+      "role": "Unknown",
+      "first_seen": "2026-09-05T07:50:59.905943+00:00",
+      "last_seen": "2026-09-05T07:50:59.990499+00:00",
+      "duration_seconds": 0.08,
+      "observations": 2
+    },
+    {
+      "track_id": 55,
+      "role": "Unknown",
+      "first_seen": "2026-09-05T07:51:02.909101+00:00",
+      "last_seen": "2026-09-05T07:51:02.991922+00:00",
+      "duration_seconds": 0.08,
+      "observations": 2
+    }
+  ]
+}

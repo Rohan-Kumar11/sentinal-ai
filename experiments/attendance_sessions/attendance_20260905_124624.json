@@ -1,0 +1,83 @@
+{
+  "session_id": "20260905_124624",
+  "session_started_at": "2026-09-05T07:16:24.668787+00:00",
+  "session_ended_at": "2026-09-05T07:16:58.077412+00:00",
+  "total_tracked": 9,
+  "staff": 2,
+  "beneficiary": 0,
+  "unknown": 7,
+  "records": [
+    {
+      "track_id": 1,
+      "role": "Staff",
+      "first_seen": "2026-09-05T07:16:24.714695+00:00",
+      "last_seen": "2026-09-05T07:16:24.714695+00:00",
+      "duration_seconds": 0.0,
+      "observations": 1
+    },
+    {
+      "track_id": 2,
+      "role": "Staff",
+      "first_seen": "2026-09-05T07:16:27.581895+00:00",
+      "last_seen": "2026-09-05T07:16:30.786945+00:00",
+      "duration_seconds": 3.21,
+      "observations": 23
+    },
+    {
+      "track_id": 5,
+      "role": "Unknown",
+      "first_seen": "2026-09-05T07:16:28.933345+00:00",
+      "last_seen": "2026-09-05T07:16:32.465171+00:00",
+      "duration_seconds": 3.53,
+      "observations": 6
+    },
+    {
+      "track_id": 7,
+      "role": "Unknown",
+      "first_seen": "2026-09-05T07:16:31.739893+00:00",
+      "last_seen": "2026-09-05T07:16:37.414421+00:00",
+      "duration_seconds": 5.67,
+      "observations": 41
+    },
+    {
+      "track_id": 9,
+      "role": "Unknown",
+      "first_seen": "2026-09-05T07:16:38.923122+00:00",
+      "last_seen": "2026-09-05T07:16:57.930561+00:00",
+      "duration_seconds": 19.01,
+      "observations": 197
+    },
+    {
+      "track_id": 10,
+      "role": "Unknown",
+      "first_seen": "2026-09-05T07:16:41.887771+00:00",
+      "last_seen": "2026-09-05T07:16:42.638325+00:00",
+      "duration_seconds": 0.75,
+      "observations": 10
+    },
+    {
+      "track_id": 11,
+      "role": "Unknown",
+      "first_seen": "2026-09-05T07:16:43.504492+00:00",
+      "last_seen": "2026-09-05T07:16:43.754949+00:00",
+      "duration_seconds": 0.25,
+      "observations": 4
+    },
+    {
+      "track_id": 13,
+      "role": "Unknown",
+      "first_seen": "2026-09-05T07:16:48.372500+00:00",
+      "last_seen": "2026-09-05T07:16:53.835170+00:00",
+      "duration_seconds": 5.46,
+      "observations": 62
+    },
+    {
+      "track_id": 14,
+      "role": "Unknown",
+      "first_seen": "2026-09-05T07:16:52.607779+00:00",
+      "last_seen": "2026-09-05T07:16:53.007916+00:00",
+      "duration_seconds": 0.4,
+      "observations": 5
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "session_id": "20260905_152839",
+  "session_started_at": "2026-09-05T15:28:39.573284+00:00",
+  "session_ended_at": "2026-09-05T15:30:03.307021+00:00",
+  "total_tracked": 8,
+  "staff": 1,
+  "beneficiary": 2,
+  "unknown": 5,
+  "records": [
+    {
+      "track_id": 1,
+      "role": "Staff",
+      "first_seen": "2026-09-05T15:28:40.094680+00:00",
+      "last_seen": "2026-09-05T15:29:50.690324+00:00",
+      "duration_seconds": 70.6,
+      "observations": 153
+    },
+    {
+      "track_id": 3,
+      "role": "Beneficiary",
+      "first_seen": "2026-09-05T15:28:59.963038+00:00",
+      "last_seen": "2026-09-05T15:29:07.566665+00:00",
+      "duration_seconds": 7.6,
+      "observations": 6
+    },
+    {
+      "track_id": 4,
+      "role": "Beneficiary",
+      "first_seen": "2026-09-05T15:29:21.332922+00:00",
+      "last_seen": "2026-09-05T15:29:24.062589+00:00",
+      "duration_seconds": 2.73,
+      "observations": 9
+    },
+    {
+      "track_id": 7,
+      "role": "Unknown",
+      "first_seen": "2026-09-05T15:29:23.360346+00:00",
+      "last_seen": "2026-09-05T15:29:30.252096+00:00",
+      "duration_seconds": 6.89,
+      "observations": 5
+    },
+    {
+      "track_id": 13,
+      "role": "Unknown",
+      "first_seen": "2026-09-05T15:29:42.230781+00:00",
+      "last_seen": "2026-09-05T15:29:43.345980+00:00",
+      "duration_seconds": 1.12,
+      "observations": 2
+    },
+    {
+      "track_id": 15,
+      "role": "Unknown",
+      "first_seen": "2026-09-05T15:29:49.939428+00:00",
+      "last_seen": "2026-09-05T15:29:50.690324+00:00",
+      "duration_seconds": 0.75,
+      "observations": 3
+    },
+    {
+      "track_id": 18,
+      "role": "Unknown",
+      "first_seen": "2026-09-05T15:29:52.207402+00:00",
+      "last_seen": "2026-09-05T15:30:02.655963+00:00",
+      "duration_seconds": 10.45,
+      "observations": 15
+    },
+    {
+      "track_id": 19,
+      "role": "Unknown",
+      "first_seen": "2026-09-05T15:29:54.219171+00:00",
+      "last_seen": "2026-09-05T15:29:57.260404+00:00",
+      "duration_seconds": 3.04,
+      "observations": 8
+    }
+  ]
+}

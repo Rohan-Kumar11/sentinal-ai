@@ -1,0 +1,27 @@
+{
+  "session_id": "20260904_215158",
+  "session_started_at": "2026-09-04T16:21:58.402242+00:00",
+  "session_ended_at": "2026-09-04T16:31:33.657287+00:00",
+  "total_tracked": 2,
+  "staff": 1,
+  "beneficiary": 1,
+  "unknown": 0,
+  "records": [
+    {
+      "track_id": 1,
+      "role": "Staff",
+      "first_seen": "2026-09-04T16:23:02.889290+00:00",
+      "last_seen": "2026-09-04T16:28:33.099631+00:00",
+      "duration_seconds": 330.21,
+      "observations": 220
+    },
+    {
+      "track_id": 3,
+      "role": "Beneficiary",
+      "first_seen": "2026-09-04T16:28:31.982815+00:00",
+      "last_seen": "2026-09-04T16:31:31.898160+00:00",
+      "duration_seconds": 179.92,
+      "observations": 104
+    }
+  ]
+}
