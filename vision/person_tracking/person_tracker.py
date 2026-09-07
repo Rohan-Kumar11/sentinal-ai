@@ -14,18 +14,8 @@ import time
 
 import cv2
 
-_INGESTION_DIR = os.path.join(os.path.dirname(__file__), "..", "video_ingestion")
-_DETECTION_DIR = os.path.join(os.path.dirname(__file__), "..", "person_detection")
-sys.path.insert(0, os.path.abspath(_INGESTION_DIR))
-sys.path.insert(0, os.path.abspath(_DETECTION_DIR))
+PERSON_CLASS_ID = 0
 
-from person_detector import (  # noqa: E402
-    MODEL_FILENAME,
-    MODEL_PATH,
-    PERSON_CLASS_ID,
-    load_model,
-)
-from video_capture import frame_delay_ms, open_source  # noqa: E402
 
 # Ultralytics ships this config. persist=True keeps tracker memory between frames.
 TRACKER_NAME = "ByteTrack"
