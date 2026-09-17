@@ -6,6 +6,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
+from api.routes.attendance import router as attendance_router
 from api.routes.risk import router as risk_router
 
 
@@ -612,6 +613,17 @@ def create_attendance(
 # The router implementation lives in:
 #
 # api/routes/risk.py
+# ============================================================
+
+# ============================================================
+# AI ATTENDANCE CONTROL ROUTES
+# ============================================================
+
+app.include_router(attendance_router)
+
+
+# ============================================================
+# RISK INTELLIGENCE ROUTES
 # ============================================================
 
 app.include_router(risk_router)

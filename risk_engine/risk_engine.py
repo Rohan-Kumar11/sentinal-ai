@@ -112,6 +112,12 @@ def _attendance_score(
     Calculate the attendance contribution.
 
     Maximum contribution: 25 points.
+
+    A stale/missing 24h monitoring window adds a fixed
+    contribution on top of the unknown-ratio and anomaly
+    signal terms — an institute with no recent AI monitoring
+    should not default to a zero attendance-risk score,
+    since "not being watched" is itself a risk signal.
     """
 
     unknown_ratio = _safe_float(
@@ -122,9 +128,14 @@ def _attendance_score(
         features.get("attendance_anomaly_signal"),
     )
 
+    is_stale = bool(
+        features.get("attendance_stale", False)
+    )
+
     score = (
         unknown_ratio * 15.0
         + attendance_signal * 10.0
+        + (8.0 if is_stale else 0.0)
     )
 
     return _clamp(
@@ -132,7 +143,6 @@ def _attendance_score(
         0.0,
         25.0,
     )
-
 
 def _project_score(
     features: Dict[str, Any],
@@ -305,6 +315,12 @@ def _build_reasons(
     project_risk = str(
         features.get("project_risk_level", "low")
     ).strip().lower()
+    
+    if bool(features.get("attendance_stale", False)):
+        reasons.append(
+            "No AI attendance monitoring session has run "
+            "in the last 24 hours."
+        )
 
     if unknown_ratio >= 0.30:
         reasons.append(

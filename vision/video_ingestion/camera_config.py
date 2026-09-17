@@ -27,7 +27,7 @@ class CameraConfig:
 # to Wi-Fi. Update this value when necessary.
 PHONE_CAMERA = CameraConfig(
     name="Development Phone Camera",
-    source="http://10.218.232.56:8080/video",
+    source="http://192.168.1.7:8080/video",
     source_type="ip_camera",
     location="Development Test",
 )

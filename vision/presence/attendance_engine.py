@@ -1,8 +1,10 @@
+
 import json
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List
+
 
 @dataclass
 class AttendanceRecord:
@@ -45,7 +47,31 @@ class AttendanceEngine:
     ) -> None:
         """
         Update attendance information for one tracked person.
+
+        The role classifier may return either:
+        - a string, e.g. "Staff"
+        - a dictionary containing a "role" field
+
+        AttendanceRecord always stores the normalized role string.
         """
+
+        # Normalize role classifier output.
+        #
+        # Current mock classifier returns something like:
+        # {
+        #     "track_id": 1,
+        #     "role": "Staff",
+        #     "confidence": 1.0,
+        #     "classifier_type": "MOCK"
+        # }
+        #
+        # AttendanceRecord only needs the actual role name.
+        if isinstance(role, dict):
+            role = role.get("role", "Unknown")
+
+        # Make sure the stored value is always a string.
+        if not isinstance(role, str):
+            role = str(role)
 
         if track_id not in self.records:
             self.records[track_id] = AttendanceRecord(
@@ -201,3 +227,4 @@ class AttendanceEngine:
             )
 
         return file_path
+

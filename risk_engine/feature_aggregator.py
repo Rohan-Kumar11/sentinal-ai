@@ -30,6 +30,9 @@ class RiskFeatures:
     attendance_duration_seconds: float = 0.0
     attendance_observation_count: int = 0
 
+    attendance_session_count_24h: int = 0
+    attendance_stale: bool = False
+
     # ---------------------------------------------------------
     # Project / application features
     # ---------------------------------------------------------
@@ -178,7 +181,9 @@ def _calculate_attendance_features(
     attendance: Optional[Dict[str, Any]],
 ) -> Dict[str, Any]:
     """
-    Convert an attendance session into normalized features.
+    Convert an attendance session (or a last-24h aggregated
+    attendance payload from api/routes/risk.py) into
+    normalized features.
 
     Compatible with the real AttendanceEngine session output:
 
@@ -202,6 +207,17 @@ def _calculate_attendance_features(
         ]
     }
 
+    Also compatible with the 24h-aggregated payload shape:
+
+    {
+        "total_tracked": 10,
+        "staff": 2,
+        "beneficiary": 7,
+        "unknown": 1,
+        "session_count_24h": 3,
+        "window_hours": 24
+    }
+
     The Risk Engine does not modify the attendance pipeline.
     It only normalizes its output at the integration boundary.
     """
@@ -217,6 +233,8 @@ def _calculate_attendance_features(
             "attendance_unknown_ratio": 0.0,
             "attendance_duration_seconds": 0.0,
             "attendance_observation_count": 0,
+            "attendance_session_count_24h": 0,
+            "attendance_stale": True,
         }
 
     records = attendance.get("records") or []
@@ -338,6 +356,26 @@ def _calculate_attendance_features(
             if isinstance(record, dict)
         )
 
+    # ---------------------------------------------------------
+    # 24h session count / staleness
+    #
+    # When attendance comes from load_attendance_last_24h() in
+    # api/routes/risk.py, it carries "session_count_24h". When
+    # a caller supplies attendance manually (e.g. a single raw
+    # AttendanceEngine session, or tests), that key won't be
+    # present — in that case we assume it represents one valid,
+    # non-stale session rather than guessing it's stale.
+    # ---------------------------------------------------------
+
+    if "session_count_24h" in attendance:
+        session_count_24h = _safe_int(
+            attendance.get("session_count_24h"),
+        )
+    else:
+        session_count_24h = 1
+
+    is_stale = session_count_24h <= 0
+
     return {
         "attendance_total_tracked": total_tracked,
         "attendance_staff_count": staff_count,
@@ -357,6 +395,8 @@ def _calculate_attendance_features(
         ),
         "attendance_duration_seconds": duration_seconds,
         "attendance_observation_count": observation_count,
+        "attendance_session_count_24h": session_count_24h,
+        "attendance_stale": is_stale,
     }
 
 
@@ -534,7 +574,8 @@ def _calculate_signal_features(
 
     attendance_anomaly_signal = min(
         1.0,
-        features.attendance_unknown_ratio * 1.5,
+        features.attendance_unknown_ratio * 1.5
+        + (0.6 if features.attendance_stale else 0.0),
     )
 
     inspection_anomaly_signal = min(
@@ -735,6 +776,14 @@ if __name__ == "__main__":
         f"Observations      : "
         f"{result['attendance_observation_count']}"
     )
+    print(
+        f"Session count 24h : "
+        f"{result['attendance_session_count_24h']}"
+    )
+    print(
+        f"Stale             : "
+        f"{result['attendance_stale']}"
+    )
 
     print("-" * 60)
 
@@ -753,10 +802,14 @@ if __name__ == "__main__":
     assert result["attendance_duration_seconds"] == expected_duration
     assert result["attendance_observation_count"] == expected_observations
 
+    assert result["attendance_session_count_24h"] == 1
+    assert result["attendance_stale"] is False
+
     print("Real attendance contract: PASS")
     print("Role normalization: PASS")
     print("Duration derivation: PASS")
     print("Observation derivation: PASS")
+    print("Staleness defaulting: PASS")
     print("=" * 60)
     print("FEATURE AGGREGATOR TEST SUCCESSFUL")
     print("=" * 60)
